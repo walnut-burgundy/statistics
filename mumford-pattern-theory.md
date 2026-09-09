@@ -71,43 +71,11 @@ measurements for:
 When these disagree, the disagreement is information rather than something to average
 away.
 
-## Concrete calibration example
-
-A useful first implementation came from an animated complex-field renderer. The
-question was not merely whether two frames differed, but whether the visible
-large-scale "soup" moved.
-
-The test compared raw RGB change with grayscale motion remaining after several
-low-pass/downsample steps. Define **structure retention** as coarse motion divided by
-raw motion, summarized by the median over coarse scales.
-
-A threshold of `0.30` separated two real running-APK cases:
-
-| case | raw RGB mean change | median structure retention | interpretation |
-| --- | ---: | ---: | --- |
-| ordinary moving field | `2.822` | `0.520` | large-scale structure survives; PASS |
-| eight nearly coincident repeated roots | `32.197` | `0.187` | mostly fine color/texture churn; FAIL |
-
-The repeated-root case changed about `92.6%` of eligible pixels and had more than ten
-times the raw RGB motion of the ordinary case, yet retained far less coarse structure.
-This is a compact example of why "more change" and "more pattern motion" are different
-claims.
-
-Also note the time-window issue: one ordinary six-second capture happened to fail the
-old raw RGB smoke test (`mean_abs_rgb=1.152`, `changed_fraction=0.032`), while another
-passed (`2.822`, `0.186`) and also passed the structural gate. A single short raw
-window can therefore be a brittle oracle. Prefer several windows or a sequence-level
-summary rather than lowering a structurally meaningful threshold.
-
-The low-pass retention test is still only a first approximation. A stronger follow-up
-is the deformation formulation above: coarse block matching, neighboring displacement
-coherence, and improvement after warping/alignment.
-
 ## Papers actually consulted for this note
 
 This is intentionally not an exhaustive Mumford bibliography. These are the papers or
-manuscripts actually consulted while building the note and the renderer test. Direct
-Brown/DAM copies are used where available.
+manuscripts actually consulted while building the note and the structure-motion idea.
+Direct Brown/DAM copies are used where available.
 
 - David Mumford and Jayant Shah, **"Optimal Approximations by Piecewise Smooth
   Functions and Associated Variational Problems,"** *Communications on Pure and
